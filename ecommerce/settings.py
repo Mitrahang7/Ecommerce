@@ -2,8 +2,6 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import dj_database_url
-
 
 load_dotenv()
 
@@ -21,8 +19,9 @@ SECRET_KEY = 'django-insecure-qkmi(&mnke4kz791p=galtcwtd(#-1smst#*2lwh4b)jdgpkcy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ecommerce-production-dd9d.up.railway.app','https://ecommerce-production-dd9d.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['ecommerce-production-dd9d.up.railway.app','https://ecommerce-production-dd9d.up.railway.app']
+ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS=[]
+
 
 
 # Application definition
@@ -78,11 +77,14 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),
-        conn_max_age=600,  # Keeps connection alive
-        ssl_require=True   # Enforce SSL for security
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'railway',
+        'USER': 'postgres',
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': 'roundhouse.proxy.rlwy.net',  
+        'PORT': '37612',
+    }
 }
 
 
