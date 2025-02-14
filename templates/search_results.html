@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hr>
+<div class="container">
+  <h2 class="text-center mb-5">Search Results for "{{ query }}"</h2>
+
+  <div class="row">
+    {% if results %}
+      {% for product in results %}
+      <div class="col-md-4 mb-4">
+        <div class="card" style="width: 18rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s; height: 100%; position: relative;">
+          
+          <!-- Sale Badge -->
+          {% if product.on_sale %}
+          <span class="badge bg-danger position-absolute top-0 start-0 m-3" style="z-index: 1;">Sale</span>
+          {% endif %}
+          
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}"
+            style="border-top-left-radius: 10px; border-top-right-radius: 10px; object-fit: cover; height: 250px; object-position: top;">
+          
+          <div class="card-body d-flex flex-column justify-content-between" style="height: 100%;">
+            <h5 class="card-title">
+              <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+            </h5>
+            
+            <!-- Conditional Price Display -->
+            <div class="product-price">
+              {% if product.on_sale %}
+                <h5 class="text-danger">
+                  <span class="text-muted" style="text-decoration: line-through;">${{ product.price }}</span>
+                  ${{ product.sale_price }}
+                </h5>
+              {% else %}
+                <h5 class="text-success">${{ product.price }}</h5>
+              {% endif %}
+            </div>
+
+            <div class="mt-auto">
+              <a href="#" class="btn btn-warning w-100">Add to Cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <div class="col-12 text-center">
+      <div class="alert alert-warning" role="alert" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <i class="bi bi-search" style="font-size: 2rem; color: #f1c40f;"></i>
+        <h4 class="mt-3" style="font-weight: bold;">No results found for "{{ query }}"</h4>
+        <p class="text-muted">Please try again with different keywords or check back later.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .product-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .badge {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  /* Custom style for the no results found section */
+  .alert-warning {
+    background-color: #f8e5b7;
+    border: 2px solid #f1c40f;
+  }
+
+  .alert-warning i {
+    font-size: 2rem;
+    color: #f1c40f;
+  }
+
+  .alert-warning h4 {
+    font-weight: bold;
+    color: #e67e22;
+  }
+
+  .alert-warning p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">All Categories</h2>
+
+  <div class="row justify-content-center">
+    {% for category in categories %}
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card category-card shadow-sm border-0">
+          <div class="card-body text-center">
+            <h5 class="card-title">
+              <a href="{% url 'category_products' category.id %}" class="category-link">
+                {{ category.name }}
+              </a>
+            </h5>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center">No categories available.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  /* Category Card Styling */
+  .category-card {
+    border-radius: 12px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Category Link Styling */
+  .category-link {
+    display: block;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .category-link:hover {
+    color: #007bff;
+  }
+</style>
+{% endblock %}

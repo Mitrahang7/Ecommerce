@@ -1,0 +1,107 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
+    <link href="{% static 'css/min.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+  </head>
+  <div class="container">
+  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}">Ecommm</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+          {% if user.is_authenticated %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url  'logout' %}">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'order_history' %}">Order History</a>
+          </li>
+
+            {% else %}
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+  
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+           
+          {% endif %}
+
+         
+         
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Category
+            </a>
+            <ul class="dropdown-menu">
+              {% for category in categories|slice:":5" %}
+              <li><a class="dropdown-item d-flex align-items-center" href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
+              {% endfor %}
+              <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-center fw-bold" href="{% url 'all_categories' %}">View All Categories</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'view_cart' %}">
+              🛒 Cart <span class="badge bg-danger">{{ cart|length }}</span>
+            </a>
+          </li>
+          
+        </ul>
+        <!-- <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form> -->
+        <form class="d-flex" role="search" method="get" action="{% url 'search_results' %}">
+          <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" value="{{ request.GET.q }}">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        
+      </div>
+    </div>
+  </nav>
+</div>
+      {% if messages %}
+
+      {% for message in messages %}
+
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      {% endfor %}
+
+      {% endif %}
+  <body> 
+    
+    {% block content %}
+
+
+    {% endblock %}
+
+    {% block extra_styles %}
+
+    {% endblock %}
+
+
+  </body>
+
+    <script src="{% static 'js/bundle.min.js' %}"></script>
+  
+</html>

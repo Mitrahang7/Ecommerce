@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="order-history-container">
+    <div class="order-history-card">
+      <h2 class="order-history-title">Your Order History</h2>
+
+      {% if orders %}
+        <div class="order-history-table-container">
+          <table class="order-history-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Total Price</th>
+                <th>Total Quantity</th>
+                <th>Status</th>
+                <th>Date Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+                <tr>
+                  <td><a href="#" class="order-id">{{ order.id }}</a></td>
+                  <td>${{ order.total_price|floatformat:2 }}</td>
+                  <td>{{ order.total_quantity }}</td>
+                  <td>
+                    <span class="order-status {{ order.status|lower }}">{{ order.get_status_display }}</span>
+                  </td>
+                  <td>{{ order.created_at|date:"F j, Y" }}</td>
+                  <td><a href="#" class="view-detail-btn">View Details</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="no-orders-message">You don't have any past orders yet. Start shopping now!</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <style>
+    /* Container for the entire order history */
+    .order-history-container {
+      display: flex;
+      justify-content: center;
+      padding: 40px 10px;
+    }
+
+    /* Card style for order history */
+    .order-history-card {
+      width: 100%;
+      max-width: 900px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-history-title {
+      font-size: 2rem;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Table Styling */
+    .order-history-table-container {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .order-history-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .order-history-table th,
+    .order-history-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f1f1f1;
+    }
+
+    .order-history-table th {
+      background-color: #f8f8f8;
+      font-weight: bold;
+    }
+
+    .order-history-table tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .order-id {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .order-id:hover {
+      text-decoration: underline;
+    }
+
+    .view-detail-btn {
+      background-color: #007bff;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .view-detail-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .no-orders-message {
+      font-size: 1.1rem;
+      color: #777;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* Order Status Styling */
+    .order-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    /* Specific colors for each status */
+    .order-status.pending {
+      background-color: #ffcc00; /* Yellow */
+    }
+
+    .order-status.shipped {
+      background-color: #007bff; /* Blue */
+    }
+
+    .order-status.delivered {
+      background-color: #28a745; /* Green */
+    }
+
+    .order-status.cancelled {
+      background-color: #dc3545; /* Red */
+    }
+  </style>
+{% endblock %}

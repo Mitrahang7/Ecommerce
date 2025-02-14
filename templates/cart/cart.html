@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="cart-container card shadow-lg p-4">
+            <h1 class="text-center mb-4 text-primary fw-bold">Your Shopping Cart</h1>
+
+            {% if cart|length %}
+                <ul class="cart-items list-unstyled">
+                    {% for item in cart %}
+                        <li class="cart-item d-flex justify-content-between align-items-center mb-4 p-4 shadow-sm rounded"
+                            style="background: linear-gradient(135deg, #ffffff, #f8f9fa); border-left: 5px solid #007bff;">
+                            
+                            <div class="product-info">
+                                <h3 class="fw-bold text-dark">{{ item.product.name }}</h3>
+                                <p class="mb-1"><strong>Quantity:</strong> {{ item.quantity }}</p>
+
+                                {% if item.sale_price %}
+                                    <p class="mb-1"><strong>Price:</strong>
+                                        <span class="text-muted text-decoration-line-through">
+                                            ${{ item.price }}
+                                        </span>
+                                        <strong class="text-danger">${{ item.sale_price }}</strong>
+                                    </p>
+                                {% else %}
+                                    <p class="mb-1"><strong>Price:</strong> ${{ item.price }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="cart-actions text-center">
+                                <form method="post" action="{% url 'update_cart' item.product.id %}" class="d-flex flex-column">
+                                    {% csrf_token %}
+                                    <div class="input-group mb-2">
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control quantity-input"/>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </form>
+                                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm mt-2">Remove</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="cart-summary d-flex justify-content-between align-items-center p-4 mt-4 rounded shadow-lg"
+                     style="background: #fff; border-top: 3px solid #28a745;">
+                    <div>
+                        <p class="fs-5"><strong>Total Price:</strong> <span class="text-success">${{ cart.get_total_price }}</span></p>
+                        <p class="fs-5"><strong>Total Quantity:</strong> {{ cart.get_total_quantity }}</p>
+                    </div>
+
+                    <a href="{% url 'checkout' %}" class="btn btn-success btn-lg fw-bold shadow-sm">Proceed to Checkout</a>
+                </div>
+
+            {% else %}
+                <p class="text-center fs-4 text-muted">Your cart is empty.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

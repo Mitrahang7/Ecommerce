@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">{{ category.name }}</h2>
+  
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s;">
+          {% if product.on_sale %}
+          <span class="badge bg-danger position-absolute top-0 start-0 m-3" style="z-index: 1;">Sale</span>
+          {% endif %}
+          
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" 
+            style="border-top-left-radius: 10px; border-top-right-radius: 10px; object-fit: cover; height: 250px;">
+          
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+            </h5>
+            
+            {% if product.on_sale %}
+              <p class="text-danger">
+                <span class="text-muted" style="text-decoration: line-through;">${{ product.price }}</span>
+                ${{ product.sale_price }}
+              </p>
+            {% else %}
+              <p class="text-success">${{ product.price }}</p>
+            {% endif %}
+
+            <a href="#" class="btn btn-warning btn-sm w-100">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center">No products available in this category.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
